@@ -1,28 +1,13 @@
-from flask import Flask, redirect, url_for, render_template, request, abort
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
 
-@app.route("/")
-def index():
-    return render_template("login.html")
-
-
-@app.route("/login", methods=["POST", "GET"])
-def login():
-    if request.method == "POST":
-        print("hi", request.form)
-        if request.form["name"] == "admin":
-            return redirect(url_for("success"))
-        else:
-            abort(401)
-    else:
-        return redirect(url_for("index"))
-
-
-@app.route("/success")
-def success():
-    return "logged in successfully"
+@app.route("/api/greet", methods=["GET"])
+def greet():
+    print(request.args)
+    name = request.args.get("name", "Guest")
+    return jsonify({"message": f"Hello, {name}!"})
 
 
 if __name__ == "__main__":
